@@ -1,13 +1,17 @@
 use actix_web::{web, App, HttpResponse, HttpServer, Responder};
 use chrono::{Local};
 use env_logger;
+use std::env;
 use std::io::Write;
 use log::{info, LevelFilter};
 
 async fn redirect() -> impl Responder {
     info!("redirecting...");
+
+
+    let redir = env::var("REDIR").unwrap_or_else(|_| "https://example.com".to_string());
     HttpResponse::MovedPermanently()
-        .insert_header(("Location", "https://calendar.google.com/calendar/u/0/appointments/schedules/AcZssZ2w2hCzte8YuK2dQyKyRB1LYUktZ8HFSIjHfadmCOrDpsO9nHCp-6LjOuwNBY2IJuiCGHdIbLHz"))
+        .insert_header(("Location", redir))
         .finish()
 }
 
